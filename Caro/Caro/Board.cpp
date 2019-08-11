@@ -4,14 +4,16 @@
 Board::Board() {
 	m_width = 5;
 	m_height = 5;
-	clearBoard();
+	m_loca = { 0,0 };
+	//clearBoard();
 }
 Board::Board(unsigned int height, unsigned int width) {
 	if (width > m_width)
 		m_width = width;
 	if (height > m_height)
 		m_height = height;
-	clearBoard();
+	m_loca = { 0,0 };
+	//clearBoard();
 }
 Board::~Board() {
 
@@ -36,6 +38,11 @@ void Board::printBit() {
 		}
 		cout << endl;
 	}
+}
+
+Board& Board::operator=(const Board& other) {
+	m_board = other.m_board;
+	m_height = other.m_height;
 }
 
 bool Board::checkWIN(Loca location) {

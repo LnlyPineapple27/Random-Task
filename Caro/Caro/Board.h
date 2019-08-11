@@ -13,13 +13,18 @@ class Board
 private:
 	vector<vector<bool>> m_board;
 	unsigned int m_height, m_width;
-	void clearBoard();
+
+public:
+	Loca m_loca;
+
 public:
 	Board();
 	Board(unsigned int height, unsigned int width);
+	Board& operator=(const Board& other);
 	~Board();
 
 public:
+	void clearBoard();
 	bool checkWIN(Loca location);
 	void printBit();
 
