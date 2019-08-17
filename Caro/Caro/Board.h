@@ -5,13 +5,19 @@
 #include <vector>
 using namespace std;
 struct Loca {
-	unsigned int m_x, m_y;
+	unsigned int col, line;//virtual map
+};
+
+enum Player {
+	P1 = 1,
+	P2 = 2,
+	NONE = 0
 };
 
 class Board
 {
 private:
-	vector<vector<bool>> m_board;
+	vector<vector<int>> m_board;
 	unsigned int m_height, m_width;
 
 public:
@@ -25,9 +31,10 @@ public:
 
 public:
 	void clearBoard();
-	bool checkWIN(Loca location);
+	int checkWIN(Loca loca);
+	bool check(Loca loca, Player player);
 	void printBit();
-
+	bool InputBoard(Loca loca,Player p);
 
 };
 

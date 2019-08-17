@@ -1,5 +1,6 @@
-#include "Board.h"
+#include "Interface.h"
 int main() {
-	Board p;
-	p.printBit();
+	Interface p;
+
+	p.Start();
 }

@@ -3,7 +3,7 @@
 #define H_OFFSET 3
 #define W_OFFSET 10
 struct Map {
-	int col, line;
+	unsigned int m_x, m_y;//real map
 };
 class Interface 
 {
@@ -13,18 +13,20 @@ private:
 	int _color;
 	Board* _board;
 	Map _cursor;
-
+	int _count;
 private:
-	Map getLoca(Loca place);
-	void printCursor(Loca NextPlace);
-	void eraseCursor(Loca prevPlace);
+	Loca getLoca();
+	void printCursor(Map NextPlace);
+	void eraseCursor(Map prevPlace);
 public:
 	Interface();
 	~Interface();
 
 public:
 	void DrawBoard();
-
-
+	void Start();
+	void doTask();
+	void showLoca();
+	void drawXO();
 };
 
