@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 struct Loca {
-	unsigned int col, line;//virtual map
+	int col, line;//virtual map
 };
 
 enum Player {
@@ -18,20 +18,20 @@ class Board
 {
 private:
 	vector<vector<int>> m_board;
-	unsigned int m_height, m_width;
+	 int m_height, m_width;
 
 public:
 	Loca m_loca;
 
 public:
 	Board();
-	Board(unsigned int height, unsigned int width);
+	Board( int height,  int width);
 	Board& operator=(const Board& other);
 	~Board();
 
 public:
 	void clearBoard();
-	int checkWIN(Loca loca);
+	//int checkWIN(Loca loca);
 	bool check(Loca loca, Player player);
 	void printBit();
 	bool InputBoard(Loca loca,Player p);

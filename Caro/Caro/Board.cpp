@@ -7,7 +7,7 @@ Board::Board() {
 	m_loca = { 0,0 };
 	clearBoard();
 }
-Board::Board(unsigned int height, unsigned int width) {
+Board::Board( int height,  int width) {
 	m_width = width;
 	m_height = height;
 	m_loca = { 0,0 };
@@ -44,18 +44,18 @@ Board& Board::operator=(const Board& other) {
 	m_height = other.m_height;
 	return *this;
 }
-
-int Board::checkWIN(Loca loca) {
-	//check player1
-	if (check(loca, P1))
-		return 1;
-	
-	//check player2
-	if (check(loca, P2))
-		return 2;
-
-	return 0;
-}
+//
+//int Board::checkWIN(Loca loca) {
+//	//check player1
+//	if (check(loca, P1))
+//		return 1;
+//	
+//	//check player2
+//	if (check(loca, P2))
+//		return 2;
+//
+//	return 0;
+//}
 
 bool Board::check(Loca loca, Player player) {
 	int p;
@@ -69,65 +69,93 @@ bool Board::check(Loca loca, Player player) {
 	//ngang
 	count = 0;
 	for (int i = 0; i < 5; i++) {
-		if (m_board[loca.line][loca.col + i] == p)
-			count++;
-		else break;
+		if (loca.col + i >= m_width)
+			break;
+		else {
+			//cout << "TEST: " << loca.col + i;
+			if (m_board[loca.line][loca.col + i] == p)
+				++count;
+			else break;
+		}
 	}
 	for (int i = 0; i < 5; i++) {
-		if (m_board[loca.line][loca.col - i] == p)
-			count++;
-		else break;
+		if (loca.col - i < 0)
+			break;
+		else {
+			//cout << "TEST: " << loca.col - i;
+			if (m_board[loca.line][loca.col - i] == p)
+				++count;
+			else break;
+		}
 	}
 
-	if (count >= 5)
+	if (count > 5)
 		return 1;
 
 	//doc
 	count = 0;
 	for (int i = 0; i < 5; i++) {
+		if (loca.line + i >= m_height)
+			break;
+
 		if (m_board[loca.line + i][loca.col] == p)
-			count++;
+			++count;
 		else break;
 	}
 	for (int i = 0; i < 5; i++) {
+		if (loca.line - i < 0)
+			break;
+		
 		if (m_board[loca.line - i][loca.col] == p)
-			count++;
+			++count;
 		else break;
 	}
 
-	if (count >= 5)
+	if (count > 5)
 		return 1;
 
 	//cheo chinh
 	count = 0;
 	for (int i = 0; i < 5; i++) {
+		if ((loca.line + i >= m_height) || (loca.col + i >= m_width))
+			break;
+
 		if (m_board[loca.line + i][loca.col + i] == p)
-			count++;
+			++count;
 		else break;
 	}
 	for (int i = 0; i < 5; i++) {
+		if ((loca.line - i < 0) || (loca.col - i < 0))
+			break;
+
 		if (m_board[loca.line - i][loca.col - i] == p)
-			count++;
+			++count;
 		else break;
 	}
 
-	if (count >= 5)
+	if (count > 5)
 		return 1;
 
 	//cheo phu
 	count = 0;
 	for (int i = 0; i < 5; i++) {
+		if ((loca.line - i < 0) || (loca.col + i >= m_width))
+			break;
+
 		if (m_board[loca.line - i][loca.col + i] == p)
-			count++;
+			++count;
 		else break;
 	}
 	for (int i = 0; i < 5; i++) {
+		if ((loca.line + i >= m_height) || (loca.col - i < 0))
+			break;
+
 		if (m_board[loca.line + i][loca.col - i] == p)
-			count++;
+			++count;
 		else break;
 	}
 
-	if (count >= 5)
+	if (count > 5)
 		return 1;
 
 	return 0;
@@ -135,15 +163,15 @@ bool Board::check(Loca loca, Player player) {
 
 bool Board::InputBoard(Loca loca, Player p) {
 
-	if (m_board[loca.col][loca.line] != 0)
-		return 0;
+	if (m_board[loca.line][loca.col] != 0)
+		return 0;//Slot was taken
 
 	if (p == P1) {
-		m_board[loca.col][loca.line] = 1;
+		m_board[loca.line][loca.col] = 1;
 		return 1;
 	}
 	else if (p == P2) {
-		m_board[loca.col][loca.line] = 2;
+		m_board[loca.line][loca.col] = 2;
 		return 1;
 	}
 

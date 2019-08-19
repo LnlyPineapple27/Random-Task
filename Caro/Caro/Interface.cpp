@@ -1,11 +1,12 @@
 #include "Interface.h"
 
 Interface::Interface() {
-	_height = 15;
-	_width = 30;
+	_height = 20;
+	_width = 35;
 	_p1 = 'X';
 	_p2 = 'O';
-	_color = Color_Cyan;
+	_color1 = Color_Red;
+	_color2 = Color_Green;
 	_cursor.m_x = 1;
 	_cursor.m_y = 1;
 	_count = 0;
@@ -38,7 +39,7 @@ void Interface::showLoca() {
 }
 void Interface::printCursor(Map NextPlace) {
 	showLoca();
-	TextColor(_color);
+	TextColor(Color_Yellow);
 	gotoXY(NextPlace.m_x - 1, NextPlace.m_y);
 	cout << '[';
 	gotoXY(NextPlace.m_x + 1, NextPlace.m_y);
@@ -52,9 +53,8 @@ void Interface::eraseCursor(Map prevPlace) {
 	cout << " ";
 	gotoXY(prevPlace.m_x + 1, prevPlace.m_y);
 	cout << " ";
-	//gotoXY(place.col + 1, place.line);
-	//cout << ' ';
 }
+
 //-------------------------------
 void Interface::DrawBoard() {
 	for (int i = 0; i < _height; ++i) {
@@ -74,11 +74,13 @@ void Interface::Start() {
 }
 
 void Interface::doTask() {
-	char key = getch();
+	char key = _getch();
 
-	if (key == KEY_ESC)//undo
+	if (key == KEY_ESC) {//Exit
+		clrscr();
 		return;
-	else if (key == KEY_UP) {
+	}
+	else if (key == KEY_UP || key == 'w' || key == 'W') {
 		eraseCursor(_cursor);
 		if (_cursor.m_y == 1) {
 			_cursor.m_y = _height;
@@ -88,7 +90,7 @@ void Interface::doTask() {
 		}
 		printCursor(_cursor);
 	}
-	else if (key == KEY_DOWN) {
+	else if (key == KEY_DOWN || key == 's' || key == 'S') {
 		eraseCursor(_cursor);
 		if (_cursor.m_y == _height) {
 			_cursor.m_y = 1;
@@ -98,7 +100,7 @@ void Interface::doTask() {
 		}
 		printCursor(_cursor);
 	}
-	else if (key == KEY_LEFT) {
+	else if (key == KEY_LEFT || key == 'a' || key == 'A') {
 		eraseCursor(_cursor);
 		if (_cursor.m_x == 1) {
 			_cursor.m_x = 2 * _width - 1;
@@ -108,7 +110,7 @@ void Interface::doTask() {
 		}
 		printCursor(_cursor);
 	}
-	else if (key == KEY_RIGHT) {
+	else if (key == KEY_RIGHT || key == 'd' || key == 'D') {
 		eraseCursor(_cursor);
 		if (_cursor.m_x == 2 * _width - 1) {
 			_cursor.m_x = 1;
@@ -119,37 +121,68 @@ void Interface::doTask() {
 		printCursor(_cursor);
 	}
 	else if (key == KEY_SPACE || key == KEY_ENTER) {
-		drawXO();
+		
+		int res = drawXO();
+
+		gotoXY(20, 0);
+		if (res == 1) {
+			cout << "Player " << _p1 << " has won         ";
+		}
+		else if (res == 2)
+			cout << "Player " << _p2 << " has won         ";
+
+		if (res != 0) {
+			system("pause>nul");
+			clrscr();
+			return;
+		}
 	}
 	return doTask();
 }
 
-void Interface::drawXO() {
+int Interface::drawXO() {
 	Loca loca = getLoca();
 	bool input = 0;
-	if (_count % 2 == 0)
-		input = _board->InputBoard(loca, P1);
+	Player p;
+	if (_count % 2 != 0)
+		p = P1;
 	else
-		input = _board->InputBoard(loca, P2);
+		p = P2;
+
+	input = _board->InputBoard(loca, p);
+
 
 	if (!input) {
-		gotoXY(20, 0);
-		cout << "Slot has been taken";// ~or sth went wrong : |
+		gotoXY(20, 0); 
+		cout << "Slot has been taken               ";// ~or sth went wrong : |
+		return 0;
+	}
+	gotoXY(20, 0);
+	cout << "Inputed at slot " << loca.col << "-" << loca.line<<"                   ";
+	++_count;
+
+
+	//Draw XO on board
+	gotoXY(_cursor.m_x, _cursor.m_y);
+
+	if (p == P1) {
+		TextColor(_color1);
+		cout << _p1;
 	}
 	else {
-		gotoXY(20, 0);
-		cout << "                   ";
-		++_count;
-
-
-		//Draw XO on board
-		gotoXY(_cursor.m_x, _cursor.m_y);
-
-		if (_count % 2 == 0)
-			cout << _p1;
-		else 
-			cout << _p2;
-
-		gotoXY(_cursor.m_x, _cursor.m_y);
+		TextColor(_color2);
+		cout << _p2;
 	}
+
+	TextColor(default_Color);
+	gotoXY(_cursor.m_x, _cursor.m_y);
+
+	if (_board->check(loca, p)) {
+		if (p == P1)
+			return 1;
+		else
+			return 2;
+	}
+
+	return 0;
 }

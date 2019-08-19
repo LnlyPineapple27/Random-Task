@@ -1,16 +1,15 @@
 #pragma once
-#include "Board.h"\
-#define H_OFFSET 3
-#define W_OFFSET 10
+#include "Board.h"
+
 struct Map {
-	unsigned int m_x, m_y;//real map
+	int m_x, m_y;//real map
 };
 class Interface 
 {
 private:
-	unsigned int _height, _width;
+	int _height, _width;
 	char _p1, _p2;
-	int _color;
+	int _color1, _color2;
 	Board* _board;
 	Map _cursor;
 	int _count;
@@ -27,6 +26,6 @@ public:
 	void Start();
 	void doTask();
 	void showLoca();
-	void drawXO();
+	int drawXO();
 };
 
