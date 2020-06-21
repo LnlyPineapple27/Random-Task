@@ -1,21 +1,22 @@
-import tkinter
+from tkinter import * # import tkinter will bring up some errors
 import pygame
 import random
 from PIL import ImageTk, Image
 import PIL.Image
-# from tkinter import font as tkfont
-# from tkinter import messagebox
+from tkinter import font as tkfont
+from tkinter import messagebox
+from pygame import mixer
 
 
-mixer.init()
-
-# clicking sound(cs)
-clickchoice = 0
+mixer.init() # create mixer module to play sounds
+clickchoice = 0 # clicking sound(cs)
+bgmchoice = 0 # background music(bgm)
 
 
 def play_click_sound():
     global clickchoice
     clickchoice = 1
+    # Config sound files to play for each options
     cs_1 = pygame.mixer.Sound("click.wav")
     cs_2 = pygame.mixer.Sound("glass-tap.wav")
     cs_3 = pygame.mixer.Sound("tic.wav")
@@ -30,10 +31,6 @@ def play_click_sound():
         cs_4.play()
 
 
-# background music(bgm)
-bgmchoice = 0
-
-"""
 def play_bgmusic():
     global bgmchoice
     bgmchoice = 1
@@ -48,11 +45,7 @@ def play_bgmusic():
         bg_3.play(-1)
 
 
-play_bgmusic()
-"""
-
 class Window():
-
     def __init__(self, master):
         self.master = master
         self.init_window()
@@ -75,12 +68,10 @@ class Window():
         self.select1.add_command(label='Exit', command=self.quit)
 
     def showBackground(self):
-
         self.canvas = Canvas(self.master, width=200, height=200)
         self.canvas.pack(fill=BOTH, expand=1)
         self.img = ImageTk.PhotoImage(PIL.Image.open("ok3.png"))
         self.canvas.create_image(0, 0, anchor=NW, image=self.img)
-
         self.pvp_button = Button(self.master, text="Player vs Player",
                                  font=tkfont.Font(family="Comic Sans MS", size="13"),
                                  command=self.gotoPvP, width=23, height=1, bg="light pink")
@@ -128,10 +119,7 @@ class Window():
 
 
 # =====================
-
-
 class CREDIT():
-
     def __init__(self, master):
         self.master = master
         self.master.title("Credit")
@@ -187,7 +175,6 @@ class CREDIT():
 
 
 class GAME():
-
     def __init__(self, master, CheckLoad, Kind):
         Colums = 15
         Rows = 15
@@ -690,6 +677,7 @@ class GAME():
 
 # mainloop
 def main():
+    play_bgmusic()
     root = Tk()
     # root.geometry("800x600")
     startGUI = Window(root)
